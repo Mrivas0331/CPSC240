@@ -1,0 +1,63 @@
+     1                                 %line 1+1 input.asm
+     2                                 [section .data]
+     3 00000000 496E7075742061206E-     msg1 db "Input a number (1~9) : "
+     4 00000000 756D6265722028317E-
+     5 00000000 3929203A20         
+     6 00000017 2069732061204D756C-     msg2 db " is a Multiple of 3. "
+     7 00000017 7469706C65206F6620-
+     8 00000017 332E20             
+     9                                 [section .bss]
+    10 00000000 <gap>                   num resb 1
+    11 00000001 <gap>                   buffer resb 4
+    12                                 [section .text]
+    13                                 [global _start]
+    14                                 
+    15                                 _start:
+    16 00000000 49C7C200000000          mov r10, 0
+    17                                 
+    18                                 loop_process:
+    19 00000007 48C7C001000000          mov rax, 1
+    20 0000000E 48C7C701000000          mov rdi, 1
+    21 00000015 48C7C6[00000000]        mov rsi, msg1
+    22 0000001C 48C7C217000000          mov rdx, 23
+    23 00000023 0F05                    syscall
+    24                                 
+    25 00000025 48C7C000000000          mov rax, 0
+    26 0000002C 48C7C700000000          mov rdi, 0
+    27 00000033 48C7C6[00000000]        mov rsi, buffer
+    28 0000003A 48C7C202000000          mov rdx, 2
+    29 00000041 0F05                    syscall
+    30                                 
+    31 00000043 8A0425[00000000]        mov al, byte[buffer]
+    32 0000004A 240F                    and al, 0f
+    33 0000004C 880425[00000000]        mov byte[num], al
+    34 00000053 B303                    mov bl, 3
+    35 00000055 F6F3                    div bl
+    36 00000057 80FC00                  cmp ah, 0
+    37 0000005A 7400                    je IsMultiple
+    38 0000005C EB3C                    jmp checker
+    39                                 
+    40                                 IsMultiple:
+    41 0000005E 48C7C001000000          mov rax, 1
+    42 00000065 48C7C701000000          mov rdi, 1
+    43 0000006C 48C7C6[00000000]        mov rsi, buffer
+    44 00000073 48C7C201000000          mov rdx, 1
+    45 0000007A 0F05                    syscall
+    46                                 
+    47 0000007C 48C7C001000000          mov rax, 1
+    48 00000083 48C7C701000000          mov rdi, 1
+    49 0000008A 48C7C6[00000000]        mov rsi, msg2
+    50 00000091 48C7C215000000          mov rdx, 21
+    51 00000098 0F05                    syscall
+    52 0000009A EBFE                    jmp checker
+    53                                 
+    54                                 checker:
+    55 0000009C 49FFC2                  inc r10
+    56 0000009F 4983FA09                cmp r10, 9
+    57 000000A3 0F8C58FFFFFF            jl loop_process
+    58 000000A9 EBFE                    jmp done
+    59                                 
+    60                                 done:
+    61 000000AB 48C7C03C000000          mov rax, 60
+    62 000000B2 48C7C700000000          mov rdi, 0
+    63 000000B9 0F05                    syscall

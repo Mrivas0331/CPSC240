@@ -1,0 +1,35 @@
+     1                                 %line 1+1 quiz2.asm
+     2                                 [section .data]
+     3 00000000 3CF46F022EFB290980-     shortArr dw -3012, 623, -1234, 2345, 3456, 1267, -89, 6232, -231, 0
+     4 00000000 0DF304A7FF581819FF-
+     5 00000000 0000               
+     6                                 [section .bss]
+     7 00000000 <gap>                   evenSum resw 1
+     8                                 [section .text]
+     9                                 [global _start]
+    10                                 _start:
+    11 00000000 48C7C700000000          mov rdi, 0
+    12 00000007 48C7C600000000          mov rsi, 0
+    13 0000000E 66C70425[00000000]-     mov word[evenSum], 0
+    14 0000000E 0000               
+    15 00000018 66BB0200                mov bx, 2
+    16                                 doloop:
+    17 0000001C 6683BC36[00000000]-     cmp word[shortArr + (rsi * 2)], 0
+    18 0000001C 00                 
+    19 00000025 7420                    je doneWLoop
+    20 00000027 7F19                    jg checkLoop
+    21 00000029 668B8436[00000000]      mov ax, word[shortArr+ (rsi*2)]
+    22 00000031 66F7FB                  idiv bx
+    23 00000034 6683FA00                cmp dx, 0
+    24 00000038 7508                    jnz checkLoop
+    25 0000003A 66010425[00000000]      add word[evenSum], ax
+    26 00000042 EBFE                    jmp checkLoop
+    27                                 checkLoop:
+    28 00000044 48FFC6                  inc rsi
+    29 00000047 EBD1                    jmp doloop
+    30                                 doneWLoop:
+    31 00000049 48C7C03C000000          mov rax, 60
+    32 00000050 48C7C700000000          mov rdi, 0
+    33 00000057 0F05                    syscall
+    34                                 
+    35                                 

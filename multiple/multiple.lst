@@ -1,0 +1,36 @@
+     1                                 %line 1+1 multiple.asm
+     2                                 [section .data]
+     3 00000000 E100                    num dw 225
+     4 00000002 0000                    mul_3 dw 0
+     5 00000004 0000                    other dw 0
+     6                                 [section .text]
+     7                                 [global _start]
+     8                                 
+     9                                 _start:
+    10 00000000 668B0425[00000000]      mov ax, word[num]
+    11 00000008 66BA0000                mov dx, 0
+    12 0000000C 66B90300                mov cx, 3
+    13 00000010 66F7F1                  div cx
+    14 00000013 6683FA00                cmp dx, 0
+    15 00000017 7400                    je step_two
+    16 00000019 EB17                    jmp else_block
+    17                                 
+    18                                 step_two:
+    19 0000001B 66B90500                mov cx, 5
+    20 0000001F 66F7F1                  div cx
+    21 00000022 6683FA00                cmp dx, 0
+    22 00000026 740A                    je else_block
+    23 00000028 EBFE                    jmp checks_out
+    24                                 
+    25                                 checks_out:
+    26 0000002A 66FF0425[00000000]      inc word[mul_3]
+    27 00000032 EB08                    jmp end_prog
+    28                                 
+    29                                 else_block:
+    30 00000034 66FF0425[00000000]      inc word[other]
+    31 0000003C EBFE                    jmp end_prog
+    32                                 
+    33                                 end_prog:
+    34 0000003E 48C7C03C000000          mov rax, 60
+    35 00000045 48C7C701000000          mov rdi, 1
+    36 0000004C 0F05                    syscall

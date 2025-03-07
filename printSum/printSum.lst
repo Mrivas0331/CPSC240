@@ -1,0 +1,44 @@
+     1                                 %line 1+1 printSum.asm
+     2                                 [section .data]
+     3 00000000 31202B2032202B2033-     str1 db "1 + 2 + 3 + ... + 99 = "
+     4 00000000 202B202E2E2E202B20-
+     5 00000000 3939203D20         
+     6 00000017 0000                    sum dw 0
+     7 00000019 303030300A              ascii db "0000", 10
+     8                                 [section .text]
+     9                                 [global _start]
+    10                                 
+    11                                 _start:
+    12                                 
+    13                                 addLoop:
+    14 00000000 66010C25[00000000]      add word[sum], cx
+    15 00000008 66FFC1                  inc cx
+    16 0000000B 6683F963                cmp cx, 99
+    17 0000000F 76ED                    jbe addLoop
+    18 00000011 48C7C103000000          mov rcx, 3
+    19 00000018 668B0425[00000000]      mov ax, word[sum]
+    20                                 
+    21                                 nextPart:
+    22 00000020 66BA0000                mov dx, 0
+    23 00000024 66BB0A00                mov bx, 10
+    24 00000028 66F7F3                  div bx
+    25 0000002B 0091[00000000]          add byte[ascii + rcx], dl
+    26 00000031 48FFC9                  dec rcx
+    27 00000034 4883F900                cmp rcx, 0
+    28 00000038 7DE4                    jge nextPart
+    29                                 
+    30 0000003A 48C7C001000000          mov rax, 1
+    31 00000041 48C7C701000000          mov rdi, 1
+    32 00000048 48C7C6[00000000]        mov rsi, str1
+    33 0000004F 48C7C217000000          mov rdx, 23
+    34 00000056 0F05                    syscall
+    35                                 
+    36 00000058 48C7C001000000          mov rax, 1
+    37 0000005F 48C7C701000000          mov rdi, 1
+    38 00000066 48C7C6[00000000]        mov rsi, ascii
+    39 0000006D 48C7C205000000          mov rdx, 5
+    40 00000074 0F05                    syscall
+    41                                 
+    42 00000076 48C7C03C000000          mov rax, 60
+    43 0000007D 48C7C700000000          mov rdi, 0
+    44 00000084 0F05                    syscall

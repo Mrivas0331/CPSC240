@@ -1,0 +1,169 @@
+     1                                 %line 8+1 FinalExam.asm
+     2                                 
+     3                                 %line 16+1 FinalExam.asm
+     4                                 
+     5                                 [section .data]
+     6 00000000 496E70757420317374-     msg1 db "Input 1st number (0~9): "
+     7 00000000 206E756D6265722028-
+     8 00000000 307E39293A20       
+     9 00000018 496E70757420326E64-     msg2 db "Input 2nd number (0~9): "
+    10 00000018 206E756D6265722028-
+    11 00000018 307E39293A20       
+    12 00000030 496E70757420337264-     msg3 db "Input 3rd number (0~9): "
+    13 00000030 206E756D6265722028-
+    14 00000030 307E39293A20       
+    15 00000048 53756D203D20            msg4 db "Sum = "
+    16 0000004E 51756F7469656E7420-     msg5 db "Quotient = "
+    17 0000004E 3D20               
+    18                                 
+    19                                 [section .bss]
+    20 00000000 <gap>                   buffer resb 2
+    21 00000002 <gap>                   num1 resb 1
+    22 00000003 <gap>                   num2 resb 1
+    23 00000004 <gap>                   num3 resb 1
+    24 00000005 <gap>                   sum resb 1
+    25 00000006 <gap>                   quotient resb 1
+    26 00000007 <gap>                   ascii resb 10
+    27                                 
+    28                                 [section .text]
+    29                                 [global _start]
+    30                                 
+    31                                 _start:
+    32 00000000 48C7C001000000          mov rax, 1
+    33                                 %line 37+0 FinalExam.asm
+    34 00000007 48C7C701000000          mov rdi, 1
+    35 0000000E 48C7C6[00000000]        mov rsi, msg1
+    36 00000015 48C7C218000000          mov rdx, 24
+    37 0000001C 0F05                    syscall
+    38                                 %line 38+1 FinalExam.asm
+    39 0000001E 48C7C000000000          mov rax, 0
+    40                                 %line 38+0 FinalExam.asm
+    41 00000025 48C7C700000000          mov rdi, 0
+    42 0000002C 48C7C6[00000000]        mov rsi, buffer
+    43 00000033 48C7C202000000          mov rdx, 2
+    44 0000003A 0F05                    syscall
+    45                                 %line 39+1 FinalExam.asm
+    46 0000003C 8A0425[00000000]        mov al, byte[buffer]
+    47 00000043 240F                    and al, 0f
+    48 00000045 880425[00000000]        mov byte[num1], al
+    49                                 
+    50 0000004C 48C7C001000000          mov rax, 1
+    51                                 %line 43+0 FinalExam.asm
+    52 00000053 48C7C701000000          mov rdi, 1
+    53 0000005A 48C7C6[00000000]        mov rsi, msg2
+    54 00000061 48C7C218000000          mov rdx, 24
+    55 00000068 0F05                    syscall
+    56                                 %line 44+1 FinalExam.asm
+    57 0000006A 48C7C000000000          mov rax, 0
+    58                                 %line 44+0 FinalExam.asm
+    59 00000071 48C7C700000000          mov rdi, 0
+    60 00000078 48C7C6[00000000]        mov rsi, buffer
+    61 0000007F 48C7C202000000          mov rdx, 2
+    62 00000086 0F05                    syscall
+    63                                 %line 45+1 FinalExam.asm
+    64 00000088 8A0425[00000000]        mov al, byte[buffer]
+    65 0000008F 240F                    and al, 0f
+    66 00000091 880425[00000000]        mov byte[num2], al
+    67                                 
+    68 00000098 48C7C001000000          mov rax, 1
+    69                                 %line 49+0 FinalExam.asm
+    70 0000009F 48C7C701000000          mov rdi, 1
+    71 000000A6 48C7C6[00000000]        mov rsi, msg3
+    72 000000AD 48C7C218000000          mov rdx, 24
+    73 000000B4 0F05                    syscall
+    74                                 %line 50+1 FinalExam.asm
+    75 000000B6 48C7C000000000          mov rax, 0
+    76                                 %line 50+0 FinalExam.asm
+    77 000000BD 48C7C700000000          mov rdi, 0
+    78 000000C4 48C7C6[00000000]        mov rsi, buffer
+    79 000000CB 48C7C202000000          mov rdx, 2
+    80 000000D2 0F05                    syscall
+    81                                 %line 51+1 FinalExam.asm
+    82 000000D4 8A0425[00000000]        mov al, byte[buffer]
+    83 000000DB 240F                    and al, 0f
+    84 000000DD 880425[00000000]        mov byte[num3], al
+    85                                 
+    86 000000E4 408A3C25[00000000]      mov dil, byte[num1]
+    87 000000EC 408A3425[00000000]      mov sil, byte[num2]
+    88 000000F4 8A1425[00000000]        mov dl, byte[num3]
+    89 000000FB 48C7C1[00000000]        mov rcx, sum
+    90 00000102 48C7C2[00000000]        mov rdx, quotient
+    91 00000109 E80B000000              call calculate
+    92                                 
+    93 0000010E 48C7C03C000000          mov rax, 60
+    94 00000115 48C7C700000000          mov rdi, 0
+    95 0000011C 0F05                    syscall
+    96                                 
+    97                                 calculate:
+    98 0000011E 4088F8                  mov al, dil
+    99 00000121 4000F0                  add al, sil
+   100 00000124 8801                    mov byte[rcx], al
+   101 00000126 4889CF                  mov rdi, rcx
+   102 00000129 48C7C6[00000000]        mov rsi, ascii
+   103 00000130 E896000000              call toString
+   104 00000135 48C7C001000000          mov rax, 1
+   105                                 %line 73+0 FinalExam.asm
+   106 0000013C 48C7C701000000          mov rdi, 1
+   107 00000143 48C7C6[00000000]        mov rsi, msg4
+   108 0000014A 48C7C206000000          mov rdx, 6
+   109 00000151 0F05                    syscall
+   110                                 %line 74+1 FinalExam.asm
+   111 00000153 48C7C001000000          mov rax, 1
+   112                                 %line 74+0 FinalExam.asm
+   113 0000015A 48C7C701000000          mov rdi, 1
+   114 00000161 48C7C6[00000000]        mov rsi, ascii
+   115 00000168 48C7C202000000          mov rdx, 2
+   116 0000016F 0F05                    syscall
+   117                                 %line 75+1 FinalExam.asm
+   118                                 
+   119 00000171 4088F8                  mov al, dil
+   120 00000174 4000F0                  add al, sil
+   121 00000177 80FA00                  cmp dl, 0
+   122 0000017A 744E                    je zero_div
+   123 0000017C F6F2                    div dl
+   124 0000017E 8802                    mov byte[rdx], al
+   125 00000180 4889D7                  mov rdi, rdx
+   126 00000183 48C7C6[00000000]        mov rsi, ascii
+   127 0000018A E83C000000              call toString
+   128 0000018F 48C7C001000000          mov rax, 1
+   129                                 %line 85+0 FinalExam.asm
+   130 00000196 48C7C701000000          mov rdi, 1
+   131 0000019D 48C7C6[00000000]        mov rsi, msg5
+   132 000001A4 48C7C20B000000          mov rdx, 11
+   133 000001AB 0F05                    syscall
+   134                                 %line 86+1 FinalExam.asm
+   135 000001AD 48C7C001000000          mov rax, 1
+   136                                 %line 86+0 FinalExam.asm
+   137 000001B4 48C7C701000000          mov rdi, 1
+   138 000001BB 48C7C6[00000000]        mov rsi, ascii
+   139 000001C2 48C7C202000000          mov rdx, 2
+   140 000001C9 0F05                    syscall
+   141                                 %line 87+1 FinalExam.asm
+   142 000001CB C3                      ret
+   143                                 
+   144                                 zero_div:
+   145 000001CC C60200                  mov byte[rdx], 0
+   146 000001CF C3                      ret
+   147                                 
+   148                                 
+   149                                 toString:
+   150 000001D0 0FB607                  movzx eax, byte[rdi]
+   151 000001D3 48C7C100000000          mov rcx, 0
+   152 000001DA 48C7C30A000000          mov rbx, 10
+   153                                 pushLoop:
+   154 000001E1 BA00000000              mov edx, 0
+   155 000001E6 48F7F3                  div rbx
+   156 000001E9 6652                    push dx
+   157 000001EB 48FFC1                  inc rcx
+   158 000001EE 83F800                  cmp eax, 0
+   159 000001F1 75EC                    jne pushLoop
+   160 000001F3 48C7C3[00000000]        mov rbx, ascii
+   161 000001FA 48C7C700000000          mov rdi, 0
+   162                                 popLoop:
+   163 00000201 6658                    pop ax
+   164 00000203 0430                    add al, "0"
+   165 00000205 88043B                  mov byte[rbx+rdi], al
+   166 00000208 48FFC7                  inc rdi
+   167 0000020B E2F2                    loop popLoop
+   168 0000020D C6043B0A                mov byte[rbx+rdi], 10
+   169 00000211 C3                      ret
