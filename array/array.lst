@@ -1,0 +1,27 @@
+     1                                 %line 1+1 array.asm
+     2                                 [section .data]
+     3 00000000 0C00EB038F19686015-     array dw 12, 1003, 6543, 24680, 789, 30123, 32766
+     4 00000000 03AB75FE7F         
+     5                                 [section .bss]
+     6 00000000 <gap>                   even resw 7
+     7                                 [section .text]
+     8                                 [global _start]
+     9                                 _start:
+    10 00000000 48C7C600000000          mov rsi, 0
+    11 00000007 48C7C700000000          mov rdi, 0
+    12                                 doloop:
+    13 0000000E 668B8436[00000000]      mov ax, [array + rsi * 2]
+    14 00000016 66A90100                test ax, 1
+    15 0000001A 750B                    jnz check_loop
+    16 0000001C 6689843F[00000000]      mov [even + rdi * 2], ax
+    17 00000024 48FFC7                  inc rdi
+    18 00000027 EBFE                    jmp check_loop
+    19                                 check_loop:
+    20 00000029 48FFC6                  inc rsi
+    21 0000002C 4883FE07                cmp rsi, 7
+    22 00000030 7F00                    jg end_loop
+    23 00000032 EBD8                    jmp doloop
+    24                                 end_loop:
+    25 00000034 48C7C03C000000          mov rax, 60
+    26 0000003B 48C7C700000000          mov rdi, 0
+    27 00000042 0F05                    syscall
